@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('donate_history', function (Blueprint $table) {
+            $table->foreignId('pack_id')
+                ->after('partner_id')
+                ->nullable()
+                ->constrained('packs');
+            $table->foreignId('store_id')
+                ->after('pack_id')
+                ->nullable()
+                ->constrained('stores');
+            $table->string('ip')
+                ->after('token')
+                ->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('donate_history', function (Blueprint $table) {
+            $table->dropForeign(['pack_id']);
+            $table->dropForeign(['store_id']);
+            $table->dropColumn(['pack_id', 'store_id', 'ip']);
+        });
+    }
+};
